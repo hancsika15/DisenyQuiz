@@ -31,9 +31,9 @@ public partial class DisneyQuizGame : Form
         character03.Click += CharacterButton_Click;
         characterCorrect.Click += CharacterButton_Click;
 
-        
+
     }
-   
+
     private void InitializeImageDictionary()
     {
         imageDictionary = new Dictionary<string, Image>();
@@ -81,7 +81,7 @@ public partial class DisneyQuizGame : Form
                 pickedCharacters.Add(randomCharacter);
             }
         }
-        
+
         var imageKeys = imageDictionary.Keys.ToList();
         correctAnswer = imageKeys[random.Next(imageKeys.Count)];
         pickedCharacters.Add(correctAnswer);

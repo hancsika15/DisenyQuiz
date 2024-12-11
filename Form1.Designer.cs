@@ -39,7 +39,7 @@
             label1.AutoSize = true;
             label1.BackColor = Color.Transparent;
             label1.Font = new Font("Times New Roman", 72F, FontStyle.Bold, GraphicsUnit.Point, 238);
-            label1.Location = new Point(72, 49);
+            label1.Location = new Point(72, 39);
             label1.Name = "label1";
             label1.Size = new Size(647, 434);
             label1.TabIndex = 0;
