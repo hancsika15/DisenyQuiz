@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Timer = System.Windows.Forms.Timer;
 
 namespace DisenyQuiz;
 
@@ -18,27 +19,55 @@ public partial class DisneyQuizGame : Form
     private string correctAnswer;
     private int score = 0;
 
+    private Timer questionTimer;
+    private int timeRemaining = 20; // 20 másodperc időlimit
+
     public DisneyQuizGame()
     {
         InitializeComponent();
         InitializeDisneyCharacters();
         InitializeImageDictionary();
 
+        // Timer beállítása
+        questionTimer = new Timer();
+        questionTimer.Interval = 1000; // 1 másodperc
+        questionTimer.Tick += QuestionTimer_Tick;
+
         random = new Random();
-        btnRandomCharacter.Click += new EventHandler(btnPickRandom_Click);
         character01.Click += CharacterButton_Click;
         character02.Click += CharacterButton_Click;
         character03.Click += CharacterButton_Click;
         characterCorrect.Click += CharacterButton_Click;
 
+        StartNewQuestion(); // Játék indítása az ablak betöltésekor
 
     }
+
+    private void QuestionTimer_Tick(object sender, EventArgs e)
+    {
+        timeRemaining--;
+
+        if (timeRemaining > 0)
+        {
+            lblTimer.Text = "Idő hátra: " + timeRemaining + " másodperc";
+        }
+        else
+        {
+            questionTimer.Stop();
+            MessageBox.Show("Lejárt az idő!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            score--; // Csökkentsd a pontszámot idő túllépés esetén
+            lblscore.Text = "Az eddig elért pontjaid: " + score.ToString();
+
+            StartNewQuestion(); // Új kérdés indítása
+        }
+    }
+
 
     private void InitializeImageDictionary()
     {
         imageDictionary = new Dictionary<string, Image>();
 
-        string imagePath = "C:\\Users\\User\\Desktop\\DisenyQuiz\\images\\";
+        string imagePath = "C:\\Users\\ny20keresztúrih\\Source\\Repos\\DisenyQuiz\\images\\";
 
         imageDictionary.Add("Aranyhaj", Image.FromFile(imagePath + "rapunzel.png"));
         imageDictionary.Add("Csipkerózsika", Image.FromFile(imagePath + "csipkerozsika.png"));
@@ -67,7 +96,7 @@ public partial class DisneyQuizGame : Form
         characterCorrect.BackColor = SystemColors.Control;
     }
 
-    private void btnPickRandom_Click(object sender, EventArgs e)
+    private void GenerateNewQuestion()
     {
         ResetButtonColors();
 
@@ -96,6 +125,14 @@ public partial class DisneyQuizGame : Form
         pictureBox1.Image = imageDictionary[correctAnswer];
     }
 
+    private void StartNewQuestion()
+    {
+        timeRemaining = 20; // Időzítő visszaállítása
+        lblTimer.Text = "Idő hátra: " + timeRemaining + " másodperc";
+        questionTimer.Start();
+        GenerateNewQuestion(); // Új kérdés generálása
+    }
+
     private void CharacterButton_Click(object sender, EventArgs e)
     {
         ResetButtonColors();
@@ -106,7 +143,6 @@ public partial class DisneyQuizGame : Form
             score++;
             clickedButton.BackColor = Color.Green;
             lblscore.Text = "Az eddig elért pontjaid: " + score.ToString();
-            //hello
         }
         else
         {
@@ -117,10 +153,15 @@ public partial class DisneyQuizGame : Form
 
         if (score < 0)
         {
+            questionTimer.Stop(); // Időzítő leállítása
             MessageBox.Show("Vesztettél!", "Eredmény", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             this.Hide();
             DisneyQuiz frm = new DisneyQuiz();
             frm.Show();
+        }
+        else
+        {
+            StartNewQuestion(); // Új kérdés indítása helyes vagy helytelen válasz után
         }
     }
 }
