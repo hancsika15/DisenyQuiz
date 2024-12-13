@@ -64,7 +64,7 @@ public partial class DisneyQuizGame : Form
     {
         imageDictionary = new Dictionary<string, Image>();
 
-        string imagePath = "C:\\Users\\User\\Desktop\\DisenyQuiz\\images\\";
+        string imagePath = "C:\\Users\\ny20keresztúrih\\Source\\Repos\\DisenyQuiz\\images\\";
 
         imageDictionary.Add("Abu", Image.FromFile(imagePath + "abu.jpg"));
         imageDictionary.Add("Anna", Image.FromFile(imagePath + "anna.jpg"));
