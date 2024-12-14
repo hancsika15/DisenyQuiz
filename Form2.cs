@@ -42,29 +42,12 @@ public partial class DisneyQuizGame : Form
         StartNewQuestion(); // Játék indítása az ablak betöltésekor
 
     }
-    private void QuestionTimer_Tick(object sender, EventArgs e)
-    {
-        timeRemaining--;
 
-        if (timeRemaining > 0)
-        {
-            lblTimer.Text = timeRemaining + " másodperc";
-        }
-        else
-        {
-            questionTimer.Stop();
-            MessageBox.Show("Lejárt az idő!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            score--; // Csökkentsd a pontszámot idő túllépés esetén
-            lblscore.Text = "Az eddig elért pontjaid: " + score.ToString();
-
-            StartNewQuestion(); // Új kérdés indítása
-        }
-    }
     private void InitializeImageDictionary()
     {
         imageDictionary = new Dictionary<string, Image>();
 
-        string imagePath = "C:\\Users\\ny20keresztúrih\\Source\\Repos\\DisenyQuiz\\images\\";
+        string imagePath = "C:\\Users\\User\\Source\\Repos\\DisenyQuiz\\images\\";
 
         imageDictionary.Add("Abu", Image.FromFile(imagePath + "abu.jpg"));
         imageDictionary.Add("Anna", Image.FromFile(imagePath + "anna.jpg"));
@@ -121,12 +104,23 @@ public partial class DisneyQuizGame : Form
                 "Hét törpe","Tündérkeresztanya","Flóra","Fána","Dzsinn","Szimba","Mufasa","Zordon","Nala","Scar","Flounder","Eric herceg","Max kutya","Pinokkió","Dzsepettó","Tündér","Tücsök Tihamér","Dumbo","Timothy Egér","Tinker Bell","Pán Péter","Hook kapitány","John","Michael","Wendy","Bagira","Maugli","Balu","Sír Kán","Kaa","Jane","Tarzan","Clayton","Kala","Kerchak","Robin Hood","Kis John","Lady Marian","Sheriff","Szultán","Herkules","Megara","Phil","Pegazus","Zeusz","Anna hercegnő","Mother Gothel","Maui","Heihei","Tamatoa","Te Fiti","Elsőszámú Asszony","Mittens","Rhino","Vanellope","Ralph","Felix","Sgt. Calhoun","Cukorka Király","Boo","Roz","Mr. Potato Head","Hamm","Slinky","Bo Peep","Linguini","Colette","Skinner","Emile","Gusteau","Marlin","Némó","Dory","Crush","Bruce","Sven","Wall-E","Eve","Auto","Captain McCrea","Merida","Fergus király","Elinor királynő","Triplets","Thumper","Virág","Anyakutya","Balto","Marie","Toulouse","Berlioz","O'Malley","Donald kacsa","Minnie egér","Max Goof","Pete","Tiki Taki","Kanga","Micimackó","Ratatouille","Aurora","Kuzco","Kronk","Yzma","Pacha","Esmeralda","Quasimodo","Phoebus","Frollo","Clopin","Pocahontas","John Smith","Meeko","Ratcliffe","Thomas","Nakoma","Percy","Vanessa","Gideon","Honest John","Roo","Winnifred Banks","George Banks","Bert","Mary Poppins","Madame Medúza","Bianca","Bernard","Madame Mim","Arthur","Merlin","Archimedes","Madame Bonfamille","Edgar","Frou-Frou","Napoleon","Lafayette","Tiana","Naveen","Dr. Facilier","Charlotte","Mama Odie","Louis","Ray","Eudora","Big Daddy La Bouff","Scat Cat","Colonel Hathi","Winifred","King Louie","Akela","Raksha","Colonel","Seargent Tibbs","Lucy","Lord Henry Mystic","Albert","Rafiki","Sarabi","Kiara","Kovu","Vitani","Nuka","Ranjan","Zira","Tantor","Professor Ratigan","Basil","Dawson","Olivia Flaversham","Fidget"
         };
     }
-    private void ResetButtonColors()
+    private void QuestionTimer_Tick(object sender, EventArgs e)
     {
-        character01.BackColor = SystemColors.Control;
-        character02.BackColor = SystemColors.Control;
-        character03.BackColor = SystemColors.Control;
-        characterCorrect.BackColor = SystemColors.Control;
+        timeRemaining--;
+
+        if (timeRemaining > 0)
+        {
+            lblTimer.Text = timeRemaining + " másodperc";
+        }
+        else
+        {
+            questionTimer.Stop();
+            MessageBox.Show("Lejárt az idő!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            score--; // Csökkentsd a pontszámot idő túllépés esetén
+            lblscore.Text = "Az eddig elért pontjaid: " + score.ToString();
+
+            StartNewQuestion(); // Új kérdés indítása
+        }
     }
     private void GenerateNewQuestion()
     {
@@ -161,7 +155,24 @@ public partial class DisneyQuizGame : Form
         timeRemaining = 10;
         lblTimer.Text = timeRemaining + " másodperc";
         questionTimer.Start();
+
+        if (score < 0)
+        {
+            questionTimer.Stop();
+            MessageBox.Show("Vesztettél!", "Eredmény", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            this.Hide();
+            DisneyQuiz frm = new DisneyQuiz();
+            frm.Show();
+        }
+
         GenerateNewQuestion();
+    }
+    private void ResetButtonColors()
+    {
+        character01.BackColor = SystemColors.Control;
+        character02.BackColor = SystemColors.Control;
+        character03.BackColor = SystemColors.Control;
+        characterCorrect.BackColor = SystemColors.Control;
     }
     private void CharacterButton_Click(object sender, EventArgs e)
     {
@@ -201,7 +212,6 @@ public partial class DisneyQuizGame : Form
             StartNewQuestion(); // Új kérdés indítása helyes vagy helytelen válasz után
         }
     }
-
     private void btnexit_Click(object sender, EventArgs e)
     {
         questionTimer.Stop(); 
