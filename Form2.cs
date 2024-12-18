@@ -18,7 +18,6 @@ public partial class DisneyQuizGame : Form
     private Random random;
     private string correctAnswer;
     private int score = 0;
-
     private Timer questionTimer;
     private int timeRemaining = 10;
 
@@ -30,7 +29,7 @@ public partial class DisneyQuizGame : Form
 
         // Timer beállítása
         questionTimer = new Timer();
-        questionTimer.Interval = 1000; // 1 másodperc
+        questionTimer.Interval = 1000; 
         questionTimer.Tick += QuestionTimer_Tick;
 
         random = new Random();
@@ -39,15 +38,14 @@ public partial class DisneyQuizGame : Form
         character03.Click += CharacterButton_Click;
         characterCorrect.Click += CharacterButton_Click;
 
-        StartNewQuestion(); // Játék indítása az ablak betöltésekor
-
+        StartNewQuestion(); 
     }
 
     private void InitializeImageDictionary()
     {
         imageDictionary = new Dictionary<string, Image>();
 
-        string imagePath = "C:\\Users\\User\\Source\\Repos\\DisenyQuiz\\images\\";
+        string imagePath = @"Properties\\images\\";
 
         imageDictionary.Add("Abu", Image.FromFile(imagePath + "abu.jpg"));
         imageDictionary.Add("Anna", Image.FromFile(imagePath + "anna.jpg"));
@@ -89,7 +87,6 @@ public partial class DisneyQuizGame : Form
         imageDictionary.Add("Shrek", Image.FromFile(imagePath + "shrek.jpg"));
         imageDictionary.Add("Sully", Image.FromFile(imagePath + "sulley.jpg"));
         imageDictionary.Add("Sven", Image.FromFile(imagePath + "sven.jpg"));
-        imageDictionary.Add("Szamár", Image.FromFile(imagePath + "szamar.jpg"));
         imageDictionary.Add("Szörnyeteg", Image.FromFile(imagePath + "szornyeteg.jpg"));
         imageDictionary.Add("Tigris", Image.FromFile(imagePath + "tigris.jpg"));
         imageDictionary.Add("Timon", Image.FromFile(imagePath + "timon.jpg"));
@@ -116,7 +113,7 @@ public partial class DisneyQuizGame : Form
         {
             questionTimer.Stop();
             MessageBox.Show("Lejárt az idő!", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            score--; // Csökkentsd a pontszámot idő túllépés esetén
+            score--; 
             lblscore.Text = "Az eddig elért pontjaid: " + score.ToString();
 
             StartNewQuestion(); // Új kérdés indítása
@@ -124,8 +121,6 @@ public partial class DisneyQuizGame : Form
     }
     private void GenerateNewQuestion()
     {
-        ResetButtonColors();
-
         List<string> pickedCharacters = new List<string>();
 
         while (pickedCharacters.Count < 3)
@@ -167,16 +162,8 @@ public partial class DisneyQuizGame : Form
 
         GenerateNewQuestion();
     }
-    private void ResetButtonColors()
-    {
-        character01.BackColor = SystemColors.Control;
-        character02.BackColor = SystemColors.Control;
-        character03.BackColor = SystemColors.Control;
-        characterCorrect.BackColor = SystemColors.Control;
-    }
     private void CharacterButton_Click(object sender, EventArgs e)
     {
-        ResetButtonColors();
         Button clickedButton = sender as Button;
 
         if (clickedButton != null && clickedButton.Text == correctAnswer)
@@ -188,7 +175,6 @@ public partial class DisneyQuizGame : Form
             score--;
         }
 
-        // Frissítsd a pontszámot a felületen
         lblscore.Text = "Az eddig elért pontjaid: " + score.ToString();
 
         if (score < 0)
